@@ -429,8 +429,13 @@ namespace GitHub.JPMikkers.DHCP
             m_Socket.Send(endPoint, new ArraySegment<byte>(m.ToArray()));
         }
 
+        protected virtual void ProcessingReceiveMessage(DHCPMessage sourceMsg, DHCPMessage targetMsg)
+        {
+
+        }
         private void AppendConfiguredOptions(DHCPMessage sourceMsg,DHCPMessage targetMsg)
         {
+            
             foreach (OptionItem optionItem in m_Options)
             {
                 if (optionItem.Mode == OptionMode.Force || sourceMsg.IsRequestedParameter(optionItem.Option.OptionType))
@@ -441,6 +446,8 @@ namespace GitHub.JPMikkers.DHCP
                     }
                 }
             }
+
+            ProcessingReceiveMessage(sourceMsg, targetMsg);
         }
 
         private void SendOFFER(DHCPMessage sourceMsg, IPAddress offeredAddress, TimeSpan leaseTime)
