@@ -5,9 +5,9 @@ VisualStudioVersion = 16.0.30621.155
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PXE Server", "PXE Server\PXE Server.csproj", "{A9AEE220-2771-4A6B-B25C-01198BEC4D45}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tftp.Net", "Tftp.Net\Tftp.Net.csproj", "{AC5742F4-C024-41AE-B202-D8448B4A2220}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tftp.Net", "Tftp.Net\Tftp.Net.csproj", "{AC5742F4-C024-41AE-B202-D8448B4A2220}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DHCPServer", "DHCPServer\DHCPServer.csproj", "{C3BAAC17-8781-4881-B03D-2D05E8E26851}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DHCPServer", "DHCPServer\DHCPServer.csproj", "{C3BAAC17-8781-4881-B03D-2D05E8E26851}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2EF69AAC-BB7E-47D9-A6F8-16B40DCB7926}"
 	ProjectSection(SolutionItems) = preProject

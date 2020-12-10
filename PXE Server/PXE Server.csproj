@@ -8,9 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Update="wwwroot\lpxelinux.0">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <ProjectReference Include="..\DHCPServer\DHCPServer.csproj" />
+    <ProjectReference Include="..\Tftp.Net\Tftp.Net.csproj" />
   </ItemGroup>
 
 </Project>

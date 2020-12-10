@@ -7,12 +7,18 @@ namespace PXE_Server
     {
         static void Main(string[] args)
         {
+            var config = PXEConfig.Load();
+            config.Save();
 
-            var server = new HttpFileServer();
-            server.Start();
-            Console.WriteLine("Hello World!");
+            var pxe_server = new PXEServer(config);
+            pxe_server.Start();
+
+
+            Console.WriteLine("Press ENTER to exit");
             Console.ReadLine();
-            server.Stop();
+
+            pxe_server.Stop();
+
         }
     }
 }
