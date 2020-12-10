@@ -1,20 +1,24 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace PXE_Server
 {
-    public class HttpFileServer
+    public class HttpFileServer : IDisposable
     {
         private HttpListener listener;
+        private bool disposedValue;
 
-        public int Port { get; set; } = 81;
-        public string RootDirectory { get; set; }
+        private int Port { get; set; } = 80;
+        private string RootDirectory { get; set; }
 
 
-        public HttpFileServer() : this(Path.Combine(Environment.CurrentDirectory,"wwwroot")) { }
-        public HttpFileServer(string rootPath)
+        public HttpFileServer(int port) : this(port,Path.Combine(Environment.CurrentDirectory,"wwwroot")) { }
+        public HttpFileServer(int port,string rootPath)
         {
+            Port = port;
             RootDirectory = rootPath;
         }
 
@@ -23,38 +27,35 @@ namespace PXE_Server
             Stop();
 
             listener = new HttpListener();
-            listener.Prefixes.Add("http://*:" + Port.ToString() + "/");
+            var prefix = "http://+:" + Port.ToString() + "/";
+            listener.Prefixes.Add(prefix);
             //listener.Prefixes.Add("http://*:8181/");
             listener.Start();
-
-            listener.BeginGetContext(OnContext, listener);
+            Trace.WriteLine("Start HTTPD on "+prefix);
+            Trace.Flush();
+            _ = DoLoop();
 
 
         }
 
 
-        private async void OnContext(IAsyncResult ar)
+        async Task DoLoop()
         {
-            var listener = (HttpListener)ar.AsyncState;
-            HttpListenerContext ctx = null;
-            try
+            while(listener.IsListening)
             {
-                 ctx = listener.EndGetContext(ar);
+                var ctx=await listener.GetContextAsync();
+                _=ProcessingRequest(ctx);
             }
-            catch (HttpListenerException ex)
-            {
-                if (ex.ErrorCode == 995) return;
-            }
+        }
 
-            listener.BeginGetContext(OnContext, listener);
-
-            if (listener == null)
-                return;
-
+        async Task ProcessingRequest(HttpListenerContext ctx)
+        {
             var filename = ctx.Request.Url.AbsolutePath;
-            filename = filename.Substring(1).Replace('/', '\\');
+            Trace.WriteLine("HTTP request file: "+filename);
+            Trace.Flush();
 
-            filename = Path.Combine(RootDirectory, filename);
+            filename=Utils.CheckFileInRootDir(RootDirectory, filename);
+
             var info = new FileInfo(filename);
 
             if (info.Exists)
@@ -83,14 +84,42 @@ namespace PXE_Server
                 ctx.Response.StatusCode = (int)HttpStatusCode.NotFound;
             }
             ctx.Response.OutputStream.Close();
-
         }
+
         
         public void Stop()
         {
-            
             listener?.Stop();
             listener?.Close();
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    Stop();
+                }
+
+                // TODO: free unmanaged resources (unmanaged objects) and override finalizer
+                // TODO: set large fields to null
+                disposedValue = true;
+            }
+        }
+
+        // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
+        // ~HttpFileServer()
+        // {
+        //     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+        //     Dispose(disposing: false);
+        // }
+
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
     }
 }
