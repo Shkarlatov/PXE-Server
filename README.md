@@ -35,12 +35,14 @@ Test EFI x64 boot:
 2. Install [QEMU](https://qemu.weilnetz.de/w64/)
 3. Download [OVMF EDK2](https://retrage.github.io/edk2-nightly/)
 4. Run QEMU
-> qemu-system-x86_64.exe ^
-> -M q35 ^
-> -cpu max ^
-> -m 512M ^
-> -bios RELEASEX64_OVMF.fd ^
-> -netdev tap,id=mynet0,ifname=<TAP interface name> -device e1000,netdev=mynet0
+```
+ qemu-system-x86_64.exe ^
+ -M q35 ^
+ -cpu max ^
+ -m 512M ^
+ -bios RELEASEX64_OVMF.fd ^
+ -netdev tap,id=mynet0,ifname=<TAP interface name> -device e1000,netdev=mynet0
+ ```
 
 
 Test PXE BIOS boot:
@@ -55,17 +57,19 @@ Check your firewall and open ports:
 - TCP: 80
 
 On Windows:
-> netsh advfirewall firewall add rule name="PXE DHCP" dir=in action=allow protocol=UDP localport=67
-> netsh advfirewall firewall add rule name="PXE DHCP" dir=out action=allow protocol=UDP localport=67 
-> netsh advfirewall firewall add rule name="PXE TFTP" dir=in action=allow protocol=UDP localport=69
-> netsh advfirewall firewall add rule name="PXE TFTP" dir=out action=allow protocol=UDP localport=69 
-> netsh advfirewall firewall add rule name="PXE HTTP" dir=in action=allow protocol=TCP localport=80
-> netsh advfirewall firewall add rule name="PXE HTTP" dir=out action=allow protocol=TCP localport=80
+```
+ netsh advfirewall firewall add rule name="PXE DHCP" dir=in action=allow protocol=UDP localport=67
+ netsh advfirewall firewall add rule name="PXE DHCP" dir=out action=allow protocol=UDP localport=67 
+ netsh advfirewall firewall add rule name="PXE TFTP" dir=in action=allow protocol=UDP localport=69
+ netsh advfirewall firewall add rule name="PXE TFTP" dir=out action=allow protocol=UDP localport=69 
+ netsh advfirewall firewall add rule name="PXE HTTP" dir=in action=allow protocol=TCP localport=80
+ netsh advfirewall firewall add rule name="PXE HTTP" dir=out action=allow protocol=TCP localport=80
+```
 
 ## Notes
 
 1. How create grub2 pxe loader: 
-grub-mkimage -d /usr/lib/grub/i386-pc/ -O i386-pc-pxe -p "(pxe)/grub" -o grub2.pxe pxe tftp pxechain boot http linux
+`grub-mkimage -d /usr/lib/grub/i386-pc/ -O i386-pc-pxe -p "(pxe)/grub" -o grub2.pxe pxe tftp pxechain boot http linux`
 
 2. How work shim? Shim not work on http.
 I use signed shim from ubuntu 20.04. Its pre-compiled with hard-coded filename "grubx64.efi". So I can't set http path. Only work with tftp.
