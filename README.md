@@ -7,8 +7,8 @@ PXE Server provides a DHCP server with support PXE and network boot, TFTP server
 Avalible loaders:
 - SYSLINUX (bios, efi)
 - IPXE (bios, efi)
-- SHIM_GRUB2 (with secure boot)
-- UEFI_HTTP (not tested on real hardware)
+- SHIM_GRUB2 (bios, efi with secure boot)
+- UEFI_HTTP (efi-only, not tested on real hardware)
 
 ## Todo
 
