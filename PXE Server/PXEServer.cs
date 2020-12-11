@@ -20,6 +20,8 @@ namespace PXE_Server
 
         public string ServerDirectory { get; set; }
 
+        public string HTTPBootFile { get; set; }
+
         private TFTPServer tftp_server;
         private DHCPServer dhcp_server;
         private HttpFileServer http_server;
@@ -35,6 +37,8 @@ namespace PXE_Server
             DHCPPort = config.DHCPPort;
             HTTPPort = config.HTTPPort;
             TFTPPort = config.TFTPPort;
+
+            HTTPBootFile = config.HTTPBootFile;
 
             ServerDirectory = config.ServerDirectory;
             loader = Enum.Parse<Loader>(config.Loader);
@@ -71,6 +75,7 @@ namespace PXE_Server
 
             dhcp_server = new DHCPServer(BindAddress, DHCPPort);
             dhcp_server.Loader = loader;
+            dhcp_server.HTTPBootFile = HTTPBootFile;
             dhcp_server.SubnetMask = IPAddress.Parse("255.255.255.0");
             dhcp_server.PoolStart = net.Hosts().First().ToIpAddress();
             dhcp_server.PoolEnd = net.Hosts().Last().ToIpAddress();

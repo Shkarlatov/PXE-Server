@@ -19,6 +19,8 @@ namespace PXE_Server
         public string ServerDirectory { get; set; } = Path.Combine(Environment.CurrentDirectory, "wwwroot");
         public string Loader { get; set; } = "SYSLINUX";
 
+        public string HTTPBootFile { get; set; } 
+
         #region save/load
         const string cfg_file_name = "pxe.conf";
         static JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions
@@ -58,7 +60,8 @@ namespace PXE_Server
     {
         SYSLINUX,
         IPXE,
-        SHIM_GRUB2
+        SHIM_GRUB2,
+        UEFI_HTTP
     }
 
 }

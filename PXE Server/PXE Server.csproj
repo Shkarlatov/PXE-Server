@@ -12,4 +12,10 @@
     <ProjectReference Include="..\Tftp.Net\Tftp.Net.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="pxe.conf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

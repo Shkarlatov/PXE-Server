@@ -16,6 +16,7 @@ namespace PXE_Server
     {
         public IPAddress BindAddress { get; set; } = IPAddress.Parse("192.168.1.27");
         public Loader Loader { get; set; } = Loader.SYSLINUX;
+        public string HTTPBootFile {get;set;}
 
         public DHCPServer(IPAddress address) : this(address, 67) { }
         public DHCPServer(IPAddress address, int port) : base(null)
@@ -66,6 +67,8 @@ namespace PXE_Server
             { (Loader.SHIM_GRUB2,00),"grub2.pxe" },
             { (Loader.SHIM_GRUB2,07),"shimx64.efi" },
 
+            { (Loader.UEFI_HTTP,07),"shimx64.efi" }, 
+
         };
         protected override void ProcessingReceiveMessage(DHCPMessage sourceMsg, DHCPMessage targetMsg)
         {
@@ -74,13 +77,14 @@ namespace PXE_Server
 
             if (sourceMsg.isHTTP())
             {
-                bootFile = $"http://192.1";
+                bootFile = HTTPBootFile;
             }
             else
             if (sourceMsg.isIPXE())
             {
                 // this is ipxe script
-                bootFile = "http://192.168.1.27:8080/boot.ipxe";
+                // bootFile = "http://192.168.1.27:8080/boot.ipxe";
+                bootFile = HTTPBootFile;
             }
             else
 
